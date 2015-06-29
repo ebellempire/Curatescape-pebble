@@ -36,7 +36,7 @@ loading.show();
 console.log('Launching...');
 
 /* Determine location capabilities on startup */
-function init() {
+function initMenu() {
   console.log('Requesting location information...');
   navigator.geolocation.getCurrentPosition(
     locationSuccess,
@@ -218,4 +218,4 @@ function mainMenu(hasLocation){
 }
 
 /* Get user location and load the interface */
-init(); 
+initMenu(); 

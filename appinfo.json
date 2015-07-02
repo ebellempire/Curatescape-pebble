@@ -3,7 +3,7 @@
     "capabilities": [
         "location"
     ],
-    "companyName": "Center for Public History + Digital Humanities",
+    "companyName": "CPHDH",
     "longName": "Cleveland Historical",
     "projectType": "pebblejs",
     "resources": {
@@ -48,7 +48,7 @@
     },
     "sdkVersion": "3",
     "shortName": "CLE Historical",
-    "uuid": "126065a5-b399-4ffd-b1f5-101279a261ca",
+    "uuid": "03976536-a2c9-41d4-9bc2-ccd1f03abd29",
     "versionCode": 1,
     "versionLabel": "1.0",
     "watchapp": {

@@ -23,10 +23,13 @@ function strip_tags(string) {
 }
 function strTruncate(string, width) { 
     string = string.replace(/[\s\r\n]+/, ' ');
-    if(string.length >= width) {
-        return string[width-1] === ' ' ? string.substr(0, width - 1) : string.substr(0, string.substr(0, width).lastIndexOf(' '));
+    if (string.length >= width) {
+        var result = string[width - 1] === ' ' ? string.substr(0, width - 1) : string.substr(0, string.substr(0, width).lastIndexOf(' '));
+        if (result.length === 0)
+          result = string.substr(0, width - 1);
+        return result;
     }
-    return string;
+    return string;  
 }
 function strTruncateWhole(string, width) { 
   var arr = [];
@@ -126,7 +129,7 @@ function mainMenu(hasLocation){
       backgroundColor: 'white',
       textColor: 'black',
       highlightBackgroundColor: 'vividCerulean',
-      highlightTextColor: 'black',
+      highlightTextColor: 'white',
       sections: [{
         title: 'Cleveland Historical',
         items: [{
@@ -183,7 +186,7 @@ function mainMenu(hasLocation){
               
               // title
               var title = data.title.replace(/&#039;/g, "'").replace(/&quot;/g, '"');
-              var title_height = calculateUITextHeight(18, 16, title);
+              var title_height = calculateUITextHeight(24, 18, title);
               var title_container_height = title_height + 18;
               var titleBG = new UI.Rect({
                 position: new Vector2(0, 0),
@@ -194,7 +197,7 @@ function mainMenu(hasLocation){
                 position: new Vector2(2, 4),
                 size: new Vector2(140, title_height),
                 text: title,
-                font: 'gothic-18-bold',
+                font: 'gothic-24-bold',
                 color: 'white',
                 textAlign: 'center',
                 textOverflow: 'ellipsis',
@@ -207,13 +210,13 @@ function mainMenu(hasLocation){
               var y_pos=title_container_height; // y_pos always equals bottom of previous element
               
               // distance
-              var distance_height = 20;
+              var distance_height = 25;
               var distanceText = new UI.Text({
                 position: new Vector2(0, y_pos),
                 size: new Vector2(144, distance_height),
                 text: distance,
-                font: 'gothic-14',
-                color: 'black',
+                font: 'gothic-18-bold',
+                color: 'white',
                 backgroundColor: 'vividCerulean',
                 textAlign: 'center',
                 textOverflow: 'ellipsis'
@@ -248,12 +251,12 @@ function mainMenu(hasLocation){
                 console.log('Adding address...');
                 
                 // address header
-                var address_header_height = 20;
+                var address_header_height = 25;
                 var address_headerText = new UI.Text({
                   position: new Vector2(0, y_pos),
                   size: new Vector2(144, address_header_height),
                   text: 'Address',
-                  font: 'gothic-14',
+                  font: 'gothic-18-bold',
                   color: 'white',
                   backgroundColor: 'cobaltBlue',
                   textAlign: 'center',
@@ -286,12 +289,12 @@ function mainMenu(hasLocation){
                 console.log('Adding access info...');
                 
                 // access info header
-                var access_header_height = 20;
+                var access_header_height = 25;
                 var access_headerText = new UI.Text({
                   position: new Vector2(0, y_pos),
                   size: new Vector2(144, access_header_height),
                   text: 'Access Info',
-                  font: 'gothic-14',
+                  font: 'gothic-18-bold',
                   color: 'white',
                   backgroundColor: 'cobaltBlue',
                   textAlign: 'center',
@@ -323,12 +326,12 @@ function mainMenu(hasLocation){
                 console.log('Adding website...');
                 
                 // website header
-                var website_header_height = 20;
+                var website_header_height = 25;
                 var website_headerText = new UI.Text({
                   position: new Vector2(0, y_pos),
                   size: new Vector2(144, website_header_height),
                   text: 'Official Website',
-                  font: 'gothic-14',
+                  font: 'gothic-18-bold',
                   color: 'white',
                   backgroundColor: 'cobaltBlue',
                   textAlign: 'center',
@@ -341,7 +344,7 @@ function mainMenu(hasLocation){
                 var website=data.website;
                 var website_string=stripslashes(website);
                 website_string= strip_tags(website);
-                var website_height = 40;
+                var website_height = calculateUITextHeight(18, 20, website_string);
                 y_pos = y_pos + 2;
                 var websiteText = new UI.Text({
                   position: new Vector2(4, y_pos),
@@ -363,13 +366,13 @@ function mainMenu(hasLocation){
                 console.log('Adding description...');
                 
                 // story header
-                var description_header_height = 20;
+                var description_header_height = 25;
                 var description_headerText = new UI.Text({
                   position: new Vector2(0, y_pos),
                   size: new Vector2(144, description_header_height),
                   text: 'Story Excerpt',
-                  font: 'gothic-14',
-                  color: 'black',
+                  font: 'gothic-18-bold',
+                  color: 'white',
                   backgroundColor: 'orange',
                   textAlign: 'center',
                   textOverflow: 'ellipsis'
@@ -379,7 +382,8 @@ function mainMenu(hasLocation){
                 
                 // story text
                 var description= strip_tags(stripslashes(data.description)).replace(/&#039;/g, "'").replace(/&quot;/g, '"');
-                var description_height=600; 
+                description=description.substring(0,description.indexOf('\n'))+'...';// trim to 1 paragraph
+                var description_height=calculateUITextHeight(18, 24, description); 
                 console.log(description_height);
                 y_pos = y_pos + 2;
                 var descriptionText = new UI.Text({
@@ -392,17 +396,18 @@ function mainMenu(hasLocation){
                   textAlign: 'left',
                   textOverflow: 'ellipsis'
                 });
-                y_pos=y_pos+description_height+10;  
+                y_pos=y_pos+description_height+20;  
                 window.add(descriptionText);
 
                 // story footer
-                var description_footer_height = 80;
+                var description_footer_height = 90;
+                var footer_text='\nContinue reading at:\n'+web_root.replace(/^(https?):\/\//g,'')+'\n'+'items/show/'+item_id+'';
                 var description_footerText = new UI.Text({
                   position: new Vector2(0, y_pos),
                   size: new Vector2(144, description_footer_height),
-                  text: '\nContinue reading at:\n'+web_root+'items/show/'+item_id+'',
-                  font: 'gothic-14',
-                  color: 'black',
+                  text: footer_text,
+                  font: 'gothic-18',
+                  color: 'white',
                   backgroundColor: 'orange',
                   textAlign: 'center',
                   textOverflow: 'wrap'
@@ -444,7 +449,7 @@ function mainMenu(hasLocation){
           window.backgroundColor('white');
           window.scrollable('true');
           var title = project_title;
-          var title_height = calculateUITextHeight(18, 24, title);
+          var title_height = calculateUITextHeight(24, 18, title);
           var title_container_height = title_height + 18;
           var titleBG = new UI.Rect({
             position: new Vector2(0, 0),
@@ -455,20 +460,20 @@ function mainMenu(hasLocation){
             position: new Vector2(2, 4),
             size: new Vector2(140, title_height),
             text: title,
-            font: 'gothic-18-bold',
+            font: 'gothic-24-bold',
             color: 'white',
             textAlign: 'center',
             textOverflow: 'ellipsis',
             backgroundColor: 'black'
           });
           var subtitle_pos = title_container_height;
-          var subtitle_height = 20;
+          var subtitle_height = 25;
           var subtitleText = new UI.Text({
             position: new Vector2(0, subtitle_pos),
             size: new Vector2(144, subtitle_height),
             text: "About",
-            font: 'gothic-14',
-            color: 'black',
+            font: 'gothic-18-bold',
+            color: 'white',
             backgroundColor: 'vividCerulean',
             textAlign: 'center',
             textOverflow: 'ellipsis'
